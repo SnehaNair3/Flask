@@ -1,5 +1,5 @@
 
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect, url_for
 
 app=Flask(__name__,template_folder='templates')
 
@@ -35,6 +35,12 @@ def other():
     return render_template('filter.html',some_text=some_text)
 
 
+
+@app.route('/other2')
+def other2():
+    some_text='Hello'
+    return render_template(template_name_or_list='filter.html', some_text=some_text)
+
 @app.template_filter('reverse_string')
 def reverse_string(s):
     return s[::-1]
@@ -48,6 +54,13 @@ def repeat(s,times=2):
 @app.template_filter('alternate_case')
 def alternate_case(s):
     return ''.join([c.upper() if i%2==0 else c.lower() for i,c in enumerate(s)])
+
+
+
+@app.route('/redirect_endpoint')
+def redirect_endpoint():
+    return redirect(url_for('other'))
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',debug=True)
